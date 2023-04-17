@@ -6,6 +6,7 @@ export function dispatchRequest(config: AxiosRequestConfig): AxiosPromise {
     throw new Error('url is required')
   }
 
+  config.method = config.method ?? 'GET'
   const adapter = config.adapter ?? fetchAdapter
   return adapter(config)
 }

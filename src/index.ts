@@ -1,8 +1,8 @@
-import { dispatchRequest } from './core/dispatchRequest'
-import { AxiosRequestConfig, AxiosResponse } from './types'
+import { createInstance } from './core/createInstance'
 
-export function request(config: AxiosRequestConfig): Promise<AxiosResponse> {
-  return dispatchRequest(config)
-}
+const axios = createInstance()
 
+export const request = axios.request
+
+export default axios
 export * from './types'
