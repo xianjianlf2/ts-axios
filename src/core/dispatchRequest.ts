@@ -1,6 +1,7 @@
 import fetchAdapter from '../adapters/fetchAdapter'
 import { normalizeHeaders } from '../helpers/headers'
 import { buildURL } from '../helpers/buildURL'
+import { settle } from './settle'
 import { AxiosPromise, AxiosRequestConfig } from '../types'
 
 export function dispatchRequest(config: AxiosRequestConfig): AxiosPromise {
@@ -12,5 +13,6 @@ export function dispatchRequest(config: AxiosRequestConfig): AxiosPromise {
   config.headers = normalizeHeaders(config.headers)
   config.url = buildURL(config.url, config.params)
   const adapter = config.adapter ?? fetchAdapter
-  return adapter(config)
+
+  return adapter(config).then(response => settle(response))
 }

@@ -14,6 +14,7 @@ export interface AxiosRequestConfig {
   headers?: Record<string, string>
   data?: unknown
   adapter?: AxiosAdapter
+  validateStatus?: (status: number) => boolean
 }
 
 export interface AxiosResponse {
