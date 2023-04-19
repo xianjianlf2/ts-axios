@@ -1,3 +1,4 @@
+import { parseHeaders } from '../helpers/headers'
 import { AxiosAdapter } from '../types'
 
 const fetchAdapter: AxiosAdapter = async config => {
@@ -11,7 +12,7 @@ const fetchAdapter: AxiosAdapter = async config => {
     data: await response.text(),
     status: response.status,
     statusText: response.statusText,
-    headers: {},
+    headers: parseHeaders(response.headers),
     config,
     request: response
   }

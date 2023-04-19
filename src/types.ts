@@ -10,6 +10,7 @@ export type Method =
 export interface AxiosRequestConfig {
   url: string
   method?: Method
+  params?: Record<string, unknown>
   headers?: Record<string, string>
   data?: unknown
   adapter?: AxiosAdapter
