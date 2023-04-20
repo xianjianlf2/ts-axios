@@ -1,4 +1,5 @@
 import { AxiosPromise, AxiosResponse } from '../types'
+import { AxiosError } from './AxiosError'
 
 export function settle(response: AxiosResponse): AxiosPromise {
   const validateStatus = response.config.validateStatus ?? defaultValidateStatus
@@ -7,7 +8,15 @@ export function settle(response: AxiosResponse): AxiosPromise {
     return Promise.resolve(response)
   }
 
-  return Promise.reject(new Error(`Request failed with status code ${response.status}`))
+  return Promise.reject(
+    new AxiosError(
+      `Request failed with status code ${response.status}`,
+      response.config,
+      'ERR_BAD_RESPONSE',
+      response.request,
+      response
+    )
+  )
 }
 
 function defaultValidateStatus(status: number): boolean {

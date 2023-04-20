@@ -30,6 +30,14 @@ export type AxiosPromise = Promise<AxiosResponse>
 
 export type AxiosAdapter = (config: AxiosRequestConfig) => AxiosPromise
 
+export interface AxiosError extends Error {
+  config: AxiosRequestConfig
+  code?: string
+  request?: unknown
+  response?: AxiosResponse
+  isAxiosError: true
+}
+
 export interface AxiosInstance {
   (config: AxiosRequestConfig): AxiosPromise
   (url: string, config?: Omit<AxiosRequestConfig, 'url'>): AxiosPromise

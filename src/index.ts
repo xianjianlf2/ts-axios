@@ -1,4 +1,5 @@
 import { createInstance } from './core/createInstance'
+export { AxiosError, isAxiosError } from './core/AxiosError'
 
 const axios = createInstance()
 
