@@ -1,7 +1,7 @@
 import { AxiosPromise, AxiosResponse } from '../types'
 import { AxiosError } from './AxiosError'
 
-export function settle(response: AxiosResponse): AxiosPromise {
+export function settle<T = unknown>(response: AxiosResponse<T>): AxiosPromise<T> {
   const validateStatus = response.config.validateStatus ?? defaultValidateStatus
 
   if (validateStatus(response.status)) {

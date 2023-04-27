@@ -15,43 +15,43 @@ function resolveConfig(input: RequestInput, config?: Omit<AxiosRequestConfig, 'u
 }
 
 export default class Axios {
-  request(input: RequestInput, config?: Omit<AxiosRequestConfig, 'url'>): AxiosPromise {
-    return dispatchRequest(resolveConfig(input, config))
+  request<T = unknown>(input: RequestInput, config?: Omit<AxiosRequestConfig, 'url'>): AxiosPromise<T> {
+    return dispatchRequest<T>(resolveConfig(input, config))
   }
 
-  get(url: string, config?: Omit<AxiosRequestConfig, 'url' | 'method'>): AxiosPromise {
+  get<T = unknown>(url: string, config?: Omit<AxiosRequestConfig, 'url' | 'method'>): AxiosPromise<T> {
     return this.request(url, {
       ...config,
       method: 'GET'
     })
   }
 
-  delete(url: string, config?: Omit<AxiosRequestConfig, 'url' | 'method'>): AxiosPromise {
+  delete<T = unknown>(url: string, config?: Omit<AxiosRequestConfig, 'url' | 'method'>): AxiosPromise<T> {
     return this.request(url, {
       ...config,
       method: 'DELETE'
     })
   }
 
-  head(url: string, config?: Omit<AxiosRequestConfig, 'url' | 'method'>): AxiosPromise {
+  head<T = unknown>(url: string, config?: Omit<AxiosRequestConfig, 'url' | 'method'>): AxiosPromise<T> {
     return this.request(url, {
       ...config,
       method: 'HEAD'
     })
   }
 
-  options(url: string, config?: Omit<AxiosRequestConfig, 'url' | 'method'>): AxiosPromise {
+  options<T = unknown>(url: string, config?: Omit<AxiosRequestConfig, 'url' | 'method'>): AxiosPromise<T> {
     return this.request(url, {
       ...config,
       method: 'OPTIONS'
     })
   }
 
-  post(
+  post<T = unknown>(
     url: string,
     data?: unknown,
     config?: Omit<AxiosRequestConfig, 'url' | 'method' | 'data'>
-  ): AxiosPromise {
+  ): AxiosPromise<T> {
     return this.request(url, {
       ...config,
       method: 'POST',
@@ -59,11 +59,11 @@ export default class Axios {
     })
   }
 
-  put(
+  put<T = unknown>(
     url: string,
     data?: unknown,
     config?: Omit<AxiosRequestConfig, 'url' | 'method' | 'data'>
-  ): AxiosPromise {
+  ): AxiosPromise<T> {
     return this.request(url, {
       ...config,
       method: 'PUT',
@@ -71,11 +71,11 @@ export default class Axios {
     })
   }
 
-  patch(
+  patch<T = unknown>(
     url: string,
     data?: unknown,
     config?: Omit<AxiosRequestConfig, 'url' | 'method' | 'data'>
-  ): AxiosPromise {
+  ): AxiosPromise<T> {
     return this.request(url, {
       ...config,
       method: 'PATCH',

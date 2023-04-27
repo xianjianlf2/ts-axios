@@ -17,8 +17,8 @@ export interface AxiosRequestConfig {
   validateStatus?: (status: number) => boolean
 }
 
-export interface AxiosResponse {
-  data: unknown
+export interface AxiosResponse<T = unknown> {
+  data: T
   status: number
   statusText: string
   headers: Record<string, string>
@@ -26,28 +26,40 @@ export interface AxiosResponse {
   request?: unknown
 }
 
-export type AxiosPromise = Promise<AxiosResponse>
+export type AxiosPromise<T = unknown> = Promise<AxiosResponse<T>>
 
-export type AxiosAdapter = (config: AxiosRequestConfig) => AxiosPromise
+export type AxiosAdapter = (config: AxiosRequestConfig) => Promise<AxiosResponse>
 
-export interface AxiosError extends Error {
+export interface AxiosError<T = unknown> extends Error {
   config: AxiosRequestConfig
   code?: string
   request?: unknown
-  response?: AxiosResponse
+  response?: AxiosResponse<T>
   isAxiosError: true
 }
 
 export interface AxiosInstance {
-  (config: AxiosRequestConfig): AxiosPromise
-  (url: string, config?: Omit<AxiosRequestConfig, 'url'>): AxiosPromise
-  request(config: AxiosRequestConfig): AxiosPromise
-  request(url: string, config?: Omit<AxiosRequestConfig, 'url'>): AxiosPromise
-  get(url: string, config?: Omit<AxiosRequestConfig, 'url' | 'method'>): AxiosPromise
-  delete(url: string, config?: Omit<AxiosRequestConfig, 'url' | 'method'>): AxiosPromise
-  head(url: string, config?: Omit<AxiosRequestConfig, 'url' | 'method'>): AxiosPromise
-  options(url: string, config?: Omit<AxiosRequestConfig, 'url' | 'method'>): AxiosPromise
-  post(url: string, data?: unknown, config?: Omit<AxiosRequestConfig, 'url' | 'method' | 'data'>): AxiosPromise
-  put(url: string, data?: unknown, config?: Omit<AxiosRequestConfig, 'url' | 'method' | 'data'>): AxiosPromise
-  patch(url: string, data?: unknown, config?: Omit<AxiosRequestConfig, 'url' | 'method' | 'data'>): AxiosPromise
+  <T = unknown>(config: AxiosRequestConfig): AxiosPromise<T>
+  <T = unknown>(url: string, config?: Omit<AxiosRequestConfig, 'url'>): AxiosPromise<T>
+  request<T = unknown>(config: AxiosRequestConfig): AxiosPromise<T>
+  request<T = unknown>(url: string, config?: Omit<AxiosRequestConfig, 'url'>): AxiosPromise<T>
+  get<T = unknown>(url: string, config?: Omit<AxiosRequestConfig, 'url' | 'method'>): AxiosPromise<T>
+  delete<T = unknown>(url: string, config?: Omit<AxiosRequestConfig, 'url' | 'method'>): AxiosPromise<T>
+  head<T = unknown>(url: string, config?: Omit<AxiosRequestConfig, 'url' | 'method'>): AxiosPromise<T>
+  options<T = unknown>(url: string, config?: Omit<AxiosRequestConfig, 'url' | 'method'>): AxiosPromise<T>
+  post<T = unknown>(
+    url: string,
+    data?: unknown,
+    config?: Omit<AxiosRequestConfig, 'url' | 'method' | 'data'>
+  ): AxiosPromise<T>
+  put<T = unknown>(
+    url: string,
+    data?: unknown,
+    config?: Omit<AxiosRequestConfig, 'url' | 'method' | 'data'>
+  ): AxiosPromise<T>
+  patch<T = unknown>(
+    url: string,
+    data?: unknown,
+    config?: Omit<AxiosRequestConfig, 'url' | 'method' | 'data'>
+  ): AxiosPromise<T>
 }

@@ -1,10 +1,10 @@
 import { AxiosError as AxiosErrorShape, AxiosRequestConfig, AxiosResponse } from '../types'
 
-export class AxiosError extends Error implements AxiosErrorShape {
+export class AxiosError<T = unknown> extends Error implements AxiosErrorShape<T> {
   code?: string
   config: AxiosRequestConfig
   request?: unknown
-  response?: AxiosResponse
+  response?: AxiosResponse<T>
   isAxiosError = true as const
 
   constructor(
@@ -12,7 +12,7 @@ export class AxiosError extends Error implements AxiosErrorShape {
     config: AxiosRequestConfig,
     code?: string,
     request?: unknown,
-    response?: AxiosResponse
+    response?: AxiosResponse<T>
   ) {
     super(message)
     this.name = 'AxiosError'
