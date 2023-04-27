@@ -1,4 +1,4 @@
-import { isPlantObject } from './util'
+import { isPlantObject } from './utils'
 
 function normalizeHeaderName(headers: any, normalizeName: string): void {
   if (!headers) {

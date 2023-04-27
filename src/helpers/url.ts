@@ -1,4 +1,4 @@
-import { isDate, isPlantObject } from './util'
+import { isDate, isPlantObject } from './utils'
 
 function encode(val: string): string {
   return encodeURIComponent(val)

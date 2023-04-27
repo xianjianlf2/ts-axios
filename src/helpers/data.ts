@@ -1,4 +1,4 @@
-import { isPlantObject } from './util'
+import { isPlantObject } from './utils'
 
 export function transformRequest(data: any): any {
   if (isPlantObject(data)) return JSON.stringify(data)

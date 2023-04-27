@@ -1,7 +1,7 @@
-import { AxiosPromise, AxiosResponse } from './types/index'
-import { AxiosRequestConfig } from './types'
-import { parseHeaders } from './helpers/headers'
-import { createError } from './helpers/error'
+import { createError } from "../helpers/error"
+import { parseHeaders } from "../helpers/headers"
+import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from "../types"
+
 
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
   return new Promise((resolve, reject) => {
@@ -20,7 +20,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       reject(createError(`Timeout of ${timeout} ms exceeded`, config, 'ECONNABORTED', request))
     }
 
-    request.open(method.toUpperCase(), url, true)
+    request.open(method.toUpperCase(), url!, true)
 
     request.onreadystatechange = function handleLoad() {
       if (request.readyState !== 4) {
