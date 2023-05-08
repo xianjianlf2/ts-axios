@@ -38,6 +38,11 @@ export interface AxiosError<T = unknown> extends Error {
   isAxiosError: true
 }
 
+export interface AxiosInterceptorManager<V> {
+  use(onFulfilled?: (value: V) => V | Promise<V>, onRejected?: (error: unknown) => unknown): number
+  eject(id: number): void
+}
+
 export interface AxiosInstance {
   <T = unknown>(config: AxiosRequestConfig): AxiosPromise<T>
   <T = unknown>(url: string, config?: Omit<AxiosRequestConfig, 'url'>): AxiosPromise<T>
@@ -62,4 +67,8 @@ export interface AxiosInstance {
     data?: unknown,
     config?: Omit<AxiosRequestConfig, 'url' | 'method' | 'data'>
   ): AxiosPromise<T>
+  interceptors: {
+    request: AxiosInterceptorManager<AxiosRequestConfig>
+    response: AxiosInterceptorManager<AxiosResponse>
+  }
 }

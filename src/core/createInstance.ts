@@ -13,6 +13,7 @@ export function createInstance(): AxiosInstance {
   instance.post = context.post.bind(context)
   instance.put = context.put.bind(context)
   instance.patch = context.patch.bind(context)
+  instance.interceptors = context.interceptors
 
   return instance
 }
