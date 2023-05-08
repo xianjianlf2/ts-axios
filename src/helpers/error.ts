@@ -21,7 +21,7 @@ export class AxiosError extends Error {
     this.response = response
     this.isAxiosError = true
 
-    // fix: ts 继承内置对象的坑
+    // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf
     Object.setPrototypeOf(this, AxiosError.prototype)
   }
 }
