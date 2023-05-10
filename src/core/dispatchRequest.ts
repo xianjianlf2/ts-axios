@@ -3,6 +3,7 @@ import { normalizeHeaders } from '../helpers/headers'
 import { buildFullURL, buildURL } from '../helpers/buildURL'
 import { AxiosError } from './AxiosError'
 import { settle } from './settle'
+import { transformData } from './transformData'
 import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from '../types'
 
 export function dispatchRequest<T = unknown>(config: AxiosRequestConfig): AxiosPromise<T> {
@@ -14,10 +15,14 @@ export function dispatchRequest<T = unknown>(config: AxiosRequestConfig): AxiosP
   config.headers = normalizeHeaders(config.headers)
   config.url = buildFullURL(config.baseURL, config.url)
   config.url = buildURL(config.url, config.params)
+  config.data = transformData(config.data, config.headers, config.transformRequest)
   const adapter = config.adapter ?? fetchAdapter
 
   return adapter(config)
-    .then(response => settle<T>(response as AxiosResponse<T>))
+    .then(response => {
+      response.data = transformData(response.data, response.headers, config.transformResponse)
+      return settle<T>(response as AxiosResponse<T>)
+    })
     .catch(error => {
       throw AxiosError.from(error, config, 'ERR_NETWORK')
     })

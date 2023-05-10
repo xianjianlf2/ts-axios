@@ -7,6 +7,8 @@ export type Method =
   | 'HEAD'
   | 'OPTIONS'
 
+export type AxiosTransformer = (data: unknown, headers?: Record<string, string>) => unknown
+
 export interface AxiosRequestConfig {
   url?: string
   baseURL?: string
@@ -16,6 +18,8 @@ export interface AxiosRequestConfig {
   data?: unknown
   adapter?: AxiosAdapter
   validateStatus?: (status: number) => boolean
+  transformRequest?: AxiosTransformer | AxiosTransformer[]
+  transformResponse?: AxiosTransformer | AxiosTransformer[]
 }
 
 export interface AxiosResponse<T = unknown> {
