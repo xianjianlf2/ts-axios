@@ -1,11 +1,12 @@
 import InterceptorManager from './InterceptorManager'
 import { dispatchRequest } from './dispatchRequest'
+import { mergeConfig } from './mergeConfig'
 import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from '../types'
 
 type RequestInput = string | AxiosRequestConfig
 type ChainHandler<T> = ((value: T) => T | Promise<T>) | ((error: unknown) => unknown) | undefined
 
-function resolveConfig(input: RequestInput, config?: Omit<AxiosRequestConfig, 'url'>): AxiosRequestConfig {
+function resolveConfig(input: RequestInput, config?: AxiosRequestConfig): AxiosRequestConfig {
   if (typeof input === 'string') {
     return {
       ...config,
@@ -17,13 +18,19 @@ function resolveConfig(input: RequestInput, config?: Omit<AxiosRequestConfig, 'u
 }
 
 export default class Axios {
+  defaults: AxiosRequestConfig
+
   interceptors = {
     request: new InterceptorManager<AxiosRequestConfig>(),
     response: new InterceptorManager<AxiosResponse>()
   }
 
-  request<T = unknown>(input: RequestInput, config?: Omit<AxiosRequestConfig, 'url'>): AxiosPromise<T> {
-    const requestConfig = resolveConfig(input, config)
+  constructor(defaultConfig: AxiosRequestConfig = {}) {
+    this.defaults = defaultConfig
+  }
+
+  request<T = unknown>(input: RequestInput, config?: AxiosRequestConfig): AxiosPromise<T> {
+    const requestConfig = mergeConfig(this.defaults, resolveConfig(input, config))
     const chain: Array<[ChainHandler<AxiosRequestConfig | AxiosResponse<T>>, ChainHandler<AxiosRequestConfig | AxiosResponse<T>>]> = [
       [dispatchRequest<T> as ChainHandler<AxiosRequestConfig | AxiosResponse<T>>, undefined]
     ]

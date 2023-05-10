@@ -31,3 +31,15 @@ export function buildURL(url: string, params?: Record<string, unknown>): string 
   const mark = url.includes('?') ? '&' : '?'
   return `${url}${mark}${parts.join('&')}`
 }
+
+export function buildFullURL(baseURL: string | undefined, url: string): string {
+  if (!baseURL || isAbsoluteURL(url)) {
+    return url
+  }
+
+  return `${baseURL.replace(/\/+$/, '')}/${url.replace(/^\/+/, '')}`
+}
+
+function isAbsoluteURL(url: string): boolean {
+  return /^([a-z][a-z\d+\-.]*:)?\/\//i.test(url)
+}

@@ -2,6 +2,10 @@ import { parseHeaders } from '../helpers/headers'
 import { AxiosAdapter } from '../types'
 
 const fetchAdapter: AxiosAdapter = async config => {
+  if (!config.url) {
+    throw new Error('url is required')
+  }
+
   const response = await fetch(config.url, {
     method: config.method ?? 'GET',
     headers: config.headers,

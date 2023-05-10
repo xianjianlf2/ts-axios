@@ -1,8 +1,10 @@
 import Axios from './Axios'
-import { AxiosInstance } from '../types'
+import defaults from '../defaults'
+import { mergeConfig } from './mergeConfig'
+import { AxiosInstance, AxiosRequestConfig } from '../types'
 
-export function createInstance(): AxiosInstance {
-  const context = new Axios()
+export function createInstance(defaultConfig: AxiosRequestConfig = defaults): AxiosInstance {
+  const context = new Axios(defaultConfig)
   const instance = context.request.bind(context) as AxiosInstance
 
   instance.request = context.request.bind(context) as AxiosInstance['request']
@@ -13,6 +15,8 @@ export function createInstance(): AxiosInstance {
   instance.post = context.post.bind(context)
   instance.put = context.put.bind(context)
   instance.patch = context.patch.bind(context)
+  instance.defaults = context.defaults
+  instance.create = config => createInstance(mergeConfig(instance.defaults, config))
   instance.interceptors = context.interceptors
 
   return instance

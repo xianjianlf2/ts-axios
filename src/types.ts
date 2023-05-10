@@ -8,7 +8,8 @@ export type Method =
   | 'OPTIONS'
 
 export interface AxiosRequestConfig {
-  url: string
+  url?: string
+  baseURL?: string
   method?: Method
   params?: Record<string, unknown>
   headers?: Record<string, string>
@@ -67,6 +68,8 @@ export interface AxiosInstance {
     data?: unknown,
     config?: Omit<AxiosRequestConfig, 'url' | 'method' | 'data'>
   ): AxiosPromise<T>
+  defaults: AxiosRequestConfig
+  create(config?: AxiosRequestConfig): AxiosInstance
   interceptors: {
     request: AxiosInterceptorManager<AxiosRequestConfig>
     response: AxiosInterceptorManager<AxiosResponse>
