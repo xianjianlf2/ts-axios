@@ -1,9 +1,10 @@
-import { AxiosInstance } from './types'
 import Axios from './core/axios'
+import defaults from './defaults'
 import { extend } from './helpers/utils'
+import { AxiosInstance, AxiosRequestConfig } from './types'
 
-function createInstance(): AxiosInstance {
-  const context = new Axios()
+function createInstance(config: AxiosRequestConfig): AxiosInstance {
+  const context = new Axios(config)
 
   // 创建instance 指向 Axios.prototype.request 方法，并绑定了上下文 context
   const instance = Axios.prototype.request.bind(context)
@@ -14,6 +15,6 @@ function createInstance(): AxiosInstance {
   return instance as AxiosInstance
 }
 
-const axios = createInstance()
+const axios = createInstance(defaults)
 
 export default axios
