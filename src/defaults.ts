@@ -1,3 +1,5 @@
+import { transformRequest, transformResponse } from './helpers/data'
+import { processHeaders } from './helpers/headers'
 import { AxiosRequestConfig } from './types'
 
 // 默认配置
@@ -8,7 +10,18 @@ const defaults: AxiosRequestConfig = {
     common: {
       Accept: 'application/json,text/plain,*/*'
     }
-  }
+  },
+  transformRequest: [
+    function(data: any, headers: any): any {
+      processHeaders(headers, data)
+      return transformRequest(data)
+    }
+  ],
+  transformResponse: [
+    function(data: any): any {
+      return transformResponse(data)
+    }
+  ]
 }
 
 // 处理没有请求体的请求方法

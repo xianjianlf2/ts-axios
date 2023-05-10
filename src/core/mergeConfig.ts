@@ -13,7 +13,9 @@ function mergeConfig(
     validateStatus: defaultStrate
   }
 
-  config2 = config2 || {}
+  if (!config2) {
+    config2 = Object.create(null)
+  }
 
   return Object.keys({ ...config1, ...config2 }).reduce((mergedConfig, key) => {
     if (strates[key]) {
