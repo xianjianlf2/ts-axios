@@ -37,3 +37,7 @@ export function createError(
 
   return error
 }
+
+export function createCancelError(config: AxiosRequestConfig, request?: any) {
+  return new AxiosError('cancel', config, 'ECONNABORTED', request)
+}

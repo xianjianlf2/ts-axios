@@ -1,18 +1,59 @@
+import cookie from '../helpers/cookies'
 import { createError } from '../helpers/error'
 import { parseHeaders } from '../helpers/headers'
+import { isURLSameOrigin } from '../helpers/url'
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types'
 
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
   return new Promise((resolve, reject) => {
-    const { data = null, url, method = 'get', headers, responseType, timeout } = config
+    const {
+      data = null,
+      url,
+      method = 'get',
+      headers,
+      responseType,
+      timeout,
+      withCredentials,
+      signal,
+      xsrfCookieName,
+      xsrfHeaderName
+    } = config
+    let onCanceled: (cancel?: Event) => any
 
-    const request = new XMLHttpRequest()
+    let request = new XMLHttpRequest()
     // set response Type
     if (responseType) {
       request.responseType = responseType
     }
+
+    if ((withCredentials || isURLSameOrigin(url!)) && xsrfCookieName) {
+      const xsrfValue = cookie.read(xsrfCookieName)
+      if (xsrfValue) {
+        headers[xsrfHeaderName!] = xsrfValue
+      }
+    }
+
+    if (withCredentials) {
+      request.withCredentials = withCredentials
+    }
+
     if (timeout) {
       request.timeout = timeout
+    }
+
+    if (signal) {
+      const onCanceled = (cancel?: Event) => {
+        if (!request) {
+          return
+        }
+        reject(
+          !cancel || cancel.type
+            ? createError('Request aborted', config, 'ECONNABORTED', request)
+            : cancel
+        )
+        request.abort()
+      }
+      signal.aborted ? onCanceled() : signal.addEventListener('abort', onCanceled)
     }
 
     request.ontimeout = function handleTimeout() {
@@ -46,6 +87,12 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
     request.onerror = function handleError() {
       reject(createError('Network Error', config, undefined, request))
     }
+
+    // abort controller
+    request.onabort = function handleAbort() {
+      reject(createError('Request aborted', config, 'ECONNABORTED', request))
+    }
+
     Object.keys(headers).forEach(name => {
       if (data === null && name.toLowerCase() === 'content-type') {
         delete headers[name]
@@ -59,6 +106,9 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
     function handleResponse(response: AxiosResponse): void {
       if (response.status >= 200 && response.status < 300) {
         resolve(response)
+        if (config.signal) {
+          config.signal.removeEventListener('abort', onCanceled)
+        }
       } else {
         reject(
           createError(
