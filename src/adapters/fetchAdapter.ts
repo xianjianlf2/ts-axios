@@ -9,6 +9,7 @@ const fetchAdapter: AxiosAdapter = async config => {
   const response = await fetch(config.url, {
     method: config.method ?? 'GET',
     headers: config.headers,
+    signal: config.signal,
     body: config.data == null ? undefined : String(config.data)
   })
 

@@ -17,6 +17,7 @@ export interface AxiosRequestConfig {
   headers?: Record<string, string>
   data?: unknown
   adapter?: AxiosAdapter
+  signal?: AbortSignal
   validateStatus?: (status: number) => boolean
   transformRequest?: AxiosTransformer | AxiosTransformer[]
   transformResponse?: AxiosTransformer | AxiosTransformer[]

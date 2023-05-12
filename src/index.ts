@@ -1,5 +1,7 @@
 import { createInstance } from './core/createInstance'
 export { AxiosError, isAxiosError } from './core/AxiosError'
+export { isCancel } from './helpers/cancel'
+export { all, spread } from './helpers/utils'
 
 const axios = createInstance()
 
